@@ -19,8 +19,6 @@ v0.1 as basic version
 2) able to read config file
 3) documentation
 5) add release version table
-6) lint
-7) test coverage
 8) release to mvn
 
 v0.2 as multi version support

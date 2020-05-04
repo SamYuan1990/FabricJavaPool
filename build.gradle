@@ -10,12 +10,21 @@ plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
     id 'jacoco'
+    id "org.sonarqube" version "2.7"
 }
 
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+}
+
+sonarqube {
+    properties {
+        //property 'sonar.projectName', 'Example of SonarQube Scanner for Gradle Usage'
+        property "sonar.login", "admin"
+        property "sonar.password", "admin"
+    }
 }
 
 jacoco {
