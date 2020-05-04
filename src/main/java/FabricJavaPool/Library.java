@@ -4,7 +4,6 @@
 package FabricJavaPool;
 
 import FabricJavaPool.util.SampleStore;
-import FabricJavaPool.util.utils;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.PooledObject;

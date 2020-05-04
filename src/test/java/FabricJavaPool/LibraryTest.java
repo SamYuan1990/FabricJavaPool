@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.util.Collection;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class LibraryTest {
 
@@ -54,6 +55,13 @@ public class LibraryTest {
             assertEquals("Test item should diff",mychannel2.equals(mychannel),false);
             mychannelPool.returnObject(mychannel);
             mychannelPool.returnObject(mychannel2);
+            String m_env = System.getProperty("byfn");
+            if(m_env.equals("byfn")){
+                String rs=Query(mychannel,"mycc","query","a");
+                assertEquals("90",rs);
+                String rs2=Query(mychannel2,"mycc","query","a");
+                assertEquals("90",rs2);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
