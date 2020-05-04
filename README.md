@@ -11,7 +11,26 @@ Basing common pool and Fabric Java SDK.
 Will provide you a config and a pool object of channel obj base on User.
 Mostly used as query chain code for a specific user.
 Sample usage:
-
+```
+        ObjectPool<Channel>  myChannelPool= new FabricJavaPool("./src/test/resources/Networkconfig.json",getUser(),"mychannel");
+        try {
+            Channel myChannel = myChannelPool.borrowObject();
+            assertNotEquals("Test borrow item channel not null",myChannel,null);
+            assertEquals("Test borrow item channel",myChannel.isInitialized(),true);
+            Channel myChannel2 = myChannelPool.borrowObject();
+            assertNotEquals("Test borrow item channel2 not null",myChannel2,null);
+            assertEquals("Test borrow item channel2",myChannel2.isInitialized(),true);
+            assertEquals("Test item should diff",myChannel2.equals(myChannel),false);
+            myChannelPool.returnObject(myChannel);
+            myChannelPool.returnObject(myChannel2);
+            String rs=Query(myChannel,"mycc","query","a");
+            assertEquals("90",rs);
+            String rs2=Query(myChannel2,"mycc","query","a");
+            assertNotEquals("91",rs2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+```
 
 # Supported version
 TBD
@@ -21,13 +40,8 @@ v0.1 as basic version
 
 0) add query and invoke test base on first network
 1) add ci/cd test basing on first network pipeline
-2) able to read config file
-3) documentation
-5) add release version table
-6) lint
-7) test coverage
-8) release to mvn
+2) release to mvn
 
 v0.2 as multi version support
 
-9) ci/cd test with different version and update support map
+3) ci/cd test with different version and update support map
