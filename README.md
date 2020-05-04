@@ -1,7 +1,12 @@
 # FabricJavaPool
 A Pool project for Fabric Java SDK, like JDBC pool
 
-# Overview
+# Why
+Assuming we have a webUI for client, and the UI need request times to fabric network to fetch data.
+For performance exception, we don't want to have IO session many times.
+So a connection pool basing on user's msp, and try to reuse the connection on java server side by session or cookie. 
+
+# How
 Basing common pool and Fabric Java SDK.
 Will provide you a config and a pool object of channel obj base on User.
 Mostly used as query chain code for a specific user.

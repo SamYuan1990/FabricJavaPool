@@ -42,7 +42,7 @@ jacocoTestCoverageVerification {
         rule {
             enabled = false
             element = 'CLASS'
-            includes = ['FabricJavaPool.*']
+            includes = ['com.SamYuan1990.FabricJavaPool.*']
 
             limit {
                 counter = 'LINE'

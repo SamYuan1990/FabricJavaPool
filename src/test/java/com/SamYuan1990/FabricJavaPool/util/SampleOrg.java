@@ -1,4 +1,4 @@
-package FabricJavaPool.util;
+package com.SamYuan1990.FabricJavaPool.util;
 
 import org.hyperledger.fabric.sdk.User;
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
