@@ -1,4 +1,6 @@
 # Gradle
+
+
 # Build your Java project and run tests with Gradle using a Gradle wrapper script.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
@@ -10,6 +12,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+#- script: ./cicd.sh
+#  displayName: 'Run cicd script'
 - task: Gradle@2
   inputs:
     workingDirectory: ''
