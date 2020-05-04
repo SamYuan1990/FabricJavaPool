@@ -50,7 +50,7 @@
         "pem":"-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg6AurxtFGQHFjYXKH\nY5tyrfDL5BsF6ljp9+I6eTGXr0qhRANCAAQKQiyboYFVZzUL63FiGE4EkshkEXLp\nucYXPjssBT6j4a/7dsn3GBieUhE2zSfAjiHKks7BQx2oi99RrICPV4E0\n-----END PRIVATE KEY-----"
       },
       "signedCert": {
-        "path": "./src/main/resources/crypto-config//peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/signcerts/peer0.org1.example.com-cert.pem"
+        "path": "./src/test/resources/crypto-config//peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/signcerts/peer0.org1.example.com-cert.pem"
       }
     }
   },
@@ -62,7 +62,7 @@
         "grpc-max-send-message-length": 15
       },
       "tlsCACerts": {
-        "path":"./src/main/resources/crypto-config//ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem"
+        "path":"./src/test/resources/crypto-config//ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem"
       }
     }
   },
@@ -74,7 +74,7 @@
         "grpc.http2.keepalive_time": 15
       },
       "tlsCACerts": {
-        "path":"./src/main/resources/crypto-config//peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/tlscacerts/tlsca.org1.example.com-cert.pem"
+        "path":"./src/test/resources/crypto-config//peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/tlscacerts/tlsca.org1.example.com-cert.pem"
       }
     },
     "peer0.org2.example.com": {
@@ -84,7 +84,7 @@
         "grpc.http2.keepalive_time": 15
       },
       "tlsCACerts": {
-        "path":"./src/main/resources/crypto-config//peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp/tlscacerts/tlsca.org2.example.com-cert.pem"
+        "path":"./src/test/resources/crypto-config//peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp/tlscacerts/tlsca.org2.example.com-cert.pem"
       }
     }
   },
@@ -95,7 +95,7 @@
         "verify": true
       },
       "tlsCACerts": {
-        "path": "./src/main/resources/crypto-config//peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem"
+        "path": "./src/test/resources/crypto-config//peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem"
       },
       "registrar": [
         {
