@@ -10,12 +10,12 @@ pool:
 
 strategy:
   matrix:
-    set_env_to_one:
-      fabricSdkJavaVersion: 1.4.7
+    jdk8withfabric14:
+      fabricSdkJavaVersion: 1.4.6
       jdkVersion: 1.8
-    set_env_to_two:
+    latest:
       fabricSdkJavaVersion: latest
-      jdkVersion: 1.11
+      jdkVersion: latest
 
 steps:
 #- script: ./cicd.sh

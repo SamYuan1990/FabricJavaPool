@@ -51,7 +51,8 @@ gradle clean build
 ```
 
 # Supported version
-TBD
+Jdk 8
+Fabric 1.4.6
 
 # Version
 v0.1 as basic version
@@ -61,5 +62,3 @@ v0.1 as basic version
 2) release to mvn
 
 v0.2 as multi version support
-
-3) ci/cd test with different version and update support map
