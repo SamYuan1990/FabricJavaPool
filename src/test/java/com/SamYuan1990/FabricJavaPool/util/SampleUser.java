@@ -13,14 +13,15 @@ package com.SamYuan1990.FabricJavaPool.util;
  *  limitations under the License.
  */
 
+import java.io.*;
+import java.util.Set;
 import io.netty.util.internal.StringUtil;
 import org.bouncycastle.util.encoders.Hex;
 import org.hyperledger.fabric.sdk.Enrollment;
 import org.hyperledger.fabric.sdk.User;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
 
-import java.io.*;
-import java.util.Set;
+
 
 
 public class SampleUser implements User, Serializable {

@@ -3,6 +3,7 @@
  */
 package com.SamYuan1990.FabricJavaPool;
 
+import java.io.File;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.AbandonedConfig;
@@ -15,20 +16,18 @@ import org.hyperledger.fabric.sdk.NetworkConfig;
 import org.hyperledger.fabric.sdk.User;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
 
-import java.io.File;
-
 public class FabricJavaPool extends GenericObjectPool<Channel> {
 
-    public FabricJavaPool(String config_network_path,User appUser,String channel, GenericObjectPoolConfig config) {
-            super(new ChannelPoolFactory(config_network_path,appUser,channel), config);
+    public FabricJavaPool(String configNetworkPath, User appUser, String channel, GenericObjectPoolConfig config) {
+            super(new ChannelPoolFactory(configNetworkPath, appUser, channel), config);
     }
 
-    public FabricJavaPool(String config_network_path,User appUser,String channel, GenericObjectPoolConfig config, AbandonedConfig abandonedConfig) {
-            super(new ChannelPoolFactory(config_network_path,appUser,channel), config, abandonedConfig);
+    public FabricJavaPool(String configNetworkPath, User appUser, String channel, GenericObjectPoolConfig config, AbandonedConfig abandonedConfig) {
+            super(new ChannelPoolFactory(configNetworkPath, appUser, channel), config, abandonedConfig);
     }
 
-    public FabricJavaPool(String config_network_path,User appUser,String channel){
-            super(new ChannelPoolFactory(config_network_path,appUser,channel));
+    public FabricJavaPool(String configNetworkPath, User appUser, String channel) {
+            super(new ChannelPoolFactory(configNetworkPath, appUser, channel));
     }
 
 
@@ -36,12 +35,12 @@ public class FabricJavaPool extends GenericObjectPool<Channel> {
 
         private String config_network_path = "";
         private User appUser;
-        private String channel="";
+        private String channel = "";
 
-        ChannelPoolFactory(String config_network_path, User appUser, String channel){
-            this.config_network_path=config_network_path;
-            this.appUser=appUser;
-            this.channel=channel;
+        ChannelPoolFactory(String configNetworkPath, User appUser, String channel) {
+            this.config_network_path = configNetworkPath;
+            this.appUser = appUser;
+            this.channel = channel;
         }
 
         @Override
@@ -50,7 +49,7 @@ public class FabricJavaPool extends GenericObjectPool<Channel> {
             HFClient hfclient = HFClient.createNewInstance();
             CryptoSuite cryptoSuite = CryptoSuite.Factory.getCryptoSuite();
             hfclient.setCryptoSuite(cryptoSuite);
-            NetworkConfig networkConfig = NetworkConfig.fromJsonFile(new File(config_network_path));//(config_network_path);
+            NetworkConfig networkConfig = NetworkConfig.fromJsonFile(new File(config_network_path));
             hfclient.setUserContext(appUser);
             hfclient.loadChannelFromConfig(channel, networkConfig);
             myChannel = hfclient.getChannel(channel);
