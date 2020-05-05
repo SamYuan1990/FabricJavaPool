@@ -13,9 +13,6 @@ strategy:
     jdk8withfabric14:
       fabricSdkJavaVersion: 1.4.6
       jdkVersion: 1.8
-    latest:
-      fabricSdkJavaVersion: latest
-      jdkVersion: latest
 
 steps:
 #- script: ./cicd.sh
