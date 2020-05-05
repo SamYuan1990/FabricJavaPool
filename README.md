@@ -53,10 +53,10 @@ gradle clean test jacocoTestReport jacocoTestCoverageVerification build
 # Supported version
 TBD
 
-# To do
+# Version
 v0.1 as basic version
 
-0) add query and invoke test base on first network
+# To do
 1) add ci/cd test basing on first network pipeline
 2) release to mvn
 
