@@ -8,6 +8,15 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+strategy:
+  matrix:
+    set_env_to_one:
+      fabricSdkJavaVersion: 1.4.7
+      jdkVersion: 1.8
+    set_env_to_two:
+      fabricSdkJavaVersion: latest
+      jdkVersion: 1.11
+
 steps:
 #- script: ./cicd.sh
 #  displayName: 'Run cicd script'

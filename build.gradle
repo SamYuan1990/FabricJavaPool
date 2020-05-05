@@ -15,6 +15,8 @@ plugins {
 
 group = 'com.github.samyuan1990'
 version = '0.1.0-SNAPSHOT'
+sourceCompatibility = jdkVersion
+targetCompatibility = jdkVersion
 
 repositories {
     // Use jcenter for resolving dependencies.
@@ -83,7 +85,7 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:28.2-jre'
     implementation group: 'org.apache.commons', name: 'commons-pool2', version: '2.8.0'
-    implementation group: 'org.hyperledger.fabric-sdk-java', name: 'fabric-sdk-java', version: '1.4.6'
+    implementation group: 'org.hyperledger.fabric-sdk-java', name: 'fabric-sdk-java', version: fabricSdkJavaVersion
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
