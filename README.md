@@ -46,6 +46,7 @@ Add ect hosts with
 ```
 After change.
 ```
+export ORG\_GRADLE\_PROJECT_LocalFabric=true
 gradle clean test jacocoTestReport jacocoTestCoverageVerification build
 ```
 

@@ -82,10 +82,14 @@ public class FabricJavaPoolTest {
             assertNotEquals("Test borrow item channel2 not null", myChannel2, null);
             assertEquals("Test borrow item channel2", myChannel2.isInitialized(), true);
             assertEquals("Test item should diff", myChannel2.equals(myChannel), false);
-            String rs = query(myChannel, "mycc", "query", "a");
-            assertEquals("90", rs);
-            String rs2 = query(myChannel2, "mycc", "query", "a");
-            assertNotEquals("91", rs2);
+            System.out.println(System.getenv("ORG_GRADLE_PROJECT_LocalFabric"));
+            if (System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
+                String rs = query(myChannel, "mycc", "query", "a");
+                assertEquals("90", rs);
+                System.out.println(rs);
+                String rs2 = query(myChannel2, "mycc", "query", "a");
+                assertNotEquals("91", rs2);
+            }
             myChannelPool.returnObject(myChannel);
             myChannelPool.returnObject(myChannel2);
         } catch (Exception e) {
