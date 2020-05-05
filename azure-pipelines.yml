@@ -27,14 +27,6 @@ steps:
 - task: GitHubRelease@1
   inputs:
     gitHubConnection: 'git_try'
-    repositoryName: '$(Build.Repository.name)'
-    action: 'create'
-    target: '$(Build.SourceVersion)'
-    tagSource: 'gitTag'
-    tagPattern: 'release-v1.*'
-- task: GitHubRelease@1
-  inputs:
-    gitHubConnection: 'git_try'
     repositoryName: '$(Build.Repository.Name)'
     action: 'create'
     target: '$(Build.SourceVersion)'
