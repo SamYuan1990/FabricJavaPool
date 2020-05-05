@@ -32,6 +32,23 @@ Sample usage:
         }
 ```
 
+# For dev
+Copy crypto-config to your local byfn
+```
+byfn.sh up
+```
+
+Add ect hosts with
+```
+127.0.0.1       peer0.org2.example.com
+127.0.0.1       orderer.example.com
+127.0.0.1       peer0.org1.example.com
+```
+After change.
+```
+gradle clean test jacocoTestReport jacocoTestCoverageVerification build
+```
+
 # Supported version
 TBD
 

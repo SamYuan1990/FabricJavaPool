@@ -1,9 +1,8 @@
 package com.SamYuan1990.FabricJavaPool.util;
 
+import java.util.*;
 import org.hyperledger.fabric.sdk.User;
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
-
-import java.util.*;
 
 /*
  *  Copyright 2016, 2017 DTCC, Fujitsu Australia Software Technology, IBM - All Rights Reserved.
