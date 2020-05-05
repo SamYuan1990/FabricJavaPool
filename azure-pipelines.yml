@@ -32,13 +32,13 @@ steps:
     tagPattern: 'release-v1.*'
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
-- task: GitHubRelease@1
-  inputs:
-    gitHubConnection: 'git_try'
-    repositoryName: '$(Build.Repository.Name)'
-    action: 'create'
-    target: '$(Build.SourceVersion)'
-    tagSource: 'userSpecifiedTag'
-    tag: 'v0.1'
-    changeLogCompareToRelease: 'lastFullRelease'
-    changeLogType: 'commitBased'
+  #- task: GitHubRelease@1
+    #inputs:
+    #gitHubConnection: 'git_try'
+    #repositoryName: '$(Build.Repository.Name)'
+    #action: 'create'
+    #target: '$(Build.SourceVersion)'
+    #tagSource: 'userSpecifiedTag'
+    #tag: 'v0.1'
+    #changeLogCompareToRelease: 'lastFullRelease'
+    #changeLogType: 'commitBased'

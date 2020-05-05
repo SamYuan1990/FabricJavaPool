@@ -13,6 +13,9 @@ plugins {
     id 'checkstyle'
 }
 
+group = 'com.github.samyuan1990'
+version = '0.1.0-SNAPSHOT'
+
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
