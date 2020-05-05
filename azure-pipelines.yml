@@ -25,3 +25,12 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'build'
+- task: GitHubRelease@1
+  inputs:
+    repositoryName: '$(Build.Repository.name)'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'gitTag'
+    tagPattern: 'v.*'
+    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogType: 'commitBased'
