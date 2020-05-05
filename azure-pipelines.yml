@@ -34,6 +34,7 @@ steps:
     changeLogType: 'commitBased'
 - task: GitHubRelease@1
   inputs:
+    gitHubConnection: 'git_try'
     repositoryName: '$(Build.Repository.Name)'
     action: 'create'
     target: '$(Build.SourceVersion)'
