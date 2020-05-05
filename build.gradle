@@ -63,6 +63,8 @@ checkstyle {
 }
 
 check.dependsOn 'checkstyle'
+jacocoTestCoverageVerification.dependsOn 'jacocoTestReport'
+build.dependsOn 'jacocoTestCoverageVerification'
 
 task checkstyle(type: Checkstyle) {
     //configFile file("${project.projectDir}/config/checkstyle/checkstyle.xml")
