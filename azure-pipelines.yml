@@ -1,6 +1,4 @@
 # Gradle
-
-
 # Build your Java project and run tests with Gradle using a Gradle wrapper script.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
@@ -32,5 +30,14 @@ steps:
     target: '$(Build.SourceVersion)'
     tagSource: 'gitTag'
     tagPattern: 'release-v1.*'
+    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogType: 'commitBased'
+- task: GitHubRelease@2
+  inputs:
+    repositoryName: '$(Build.Repository.Name)'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'userSpecifiedTag'
+    tag: 'v0.1'
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
