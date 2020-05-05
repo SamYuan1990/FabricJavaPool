@@ -1,4 +1,4 @@
-package com.SamYuan1990.FabricJavaPool.util;
+package com.github.samyuan1990.FabricJavaPool.util;
 
 import java.util.*;
 import org.hyperledger.fabric.sdk.User;

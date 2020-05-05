@@ -1,4 +1,4 @@
-package com.SamYuan1990.FabricJavaPool.util;
+package com.github.samyuan1990.FabricJavaPool.util;
 /*
  *  Copyright 2016, 2017 DTCC, Fujitsu Australia Software Technology, IBM - All Rights Reserved.
  *
