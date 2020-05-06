@@ -1,5 +1,8 @@
 # FabricJavaPool
-A Pool project for Fabric Java SDK, like JDBC pool
+**A Connection pool manager for Fabric development**
+
+based on [fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java) 
+following design of JDBC
 
 # Why
 Assuming we have a webUI for client, and the UI need request times to fabric network to fetch data.
