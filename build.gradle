@@ -11,9 +11,12 @@ plugins {
     id 'java-library'
     id 'jacoco'
     id 'checkstyle'
+    id 'maven'
+    id 'signing'
 }
 
 group = 'com.github.samyuan1990'
+archivesBaseName = "FabricJavaPool"
 version = '0.1.0-SNAPSHOT'
 sourceCompatibility = jdkVersion
 targetCompatibility = jdkVersion
@@ -76,6 +79,70 @@ task checkstyle(type: Checkstyle) {
     include '**/*.java'
     exclude "**/test/**"
     classpath = files()
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'Example Application'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'based on [fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java) \n' +
+                        'following design of JDBC'
+                url 'https://github.com/SamYuan1990/FabricJavaPool'
+
+                scm {
+                    connection 'scm:git@github.com:SamYuan1990/FabricJavaPool.git'
+                    developerConnection 'scm:git@github.com:SamYuan1990/FabricJavaPool.git'
+                    url 'scm:git@github.com:SamYuan1990/FabricJavaPool.git'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'samyuan'
+                        name 'Sam Yuan'
+                        email 'yy19902439@126.com'
+                    }
+                }
+            }
+        }
+    }
 }
 
 dependencies {
