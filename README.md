@@ -15,6 +15,17 @@ Will provide you a config and a pool object of channel obj base on User.
 Mostly used as query chain code for a specific user.
 Sample usage:
 ```
+	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.1'
+```
+
+```
+   repositories {
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.1-SNAPSHOT'
+```
+
+```
         ObjectPool<Channel>  myChannelPool= new FabricJavaPool("./src/test/resources/Networkconfig.json",getUser(),"mychannel");
         try {
             Channel myChannel = myChannelPool.borrowObject();
@@ -58,10 +69,16 @@ Jdk 8
 Fabric 1.4.6
 
 # Version
-v0.1 as basic version
+0.0.1 as basic version
 
 # To do
-1) add ci/cd test basing on first network pipeline
-2) release to mvn
+0.0.2
+* Add query and invoke support
+* Add prop file support.
+* Mock test support(optional)
 
-v0.2 as multi version support
+0.0.3
+* Add cache from memcache, cache logic as time duration.
+
+0.0.4
+* Add cache refresh support by new block listener.
