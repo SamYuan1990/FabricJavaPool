@@ -23,7 +23,7 @@ public class FabricConnectionTest {
 
     @Test
     public void query() {
-        if (System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
+        if (System.getenv().containsKey("ORG_GRADLE_PROJECT_LocalFabric") && System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
             try {
                 FabricConnection myConnection = new FabricConnection();
                 HFClient hfclient = HFClient.createNewInstance();
@@ -46,7 +46,7 @@ public class FabricConnectionTest {
 
     @Test
     public void queryEmpty() {
-        if (System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
+        if (System.getenv().containsKey("ORG_GRADLE_PROJECT_LocalFabric") && System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
             try {
                 FabricConnection myConnection = new FabricConnection();
                 HFClient hfclient = HFClient.createNewInstance();
@@ -69,7 +69,7 @@ public class FabricConnectionTest {
 
     @Test
     public void invoke() {
-        if (System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
+        if (System.getenv().containsKey("ORG_GRADLE_PROJECT_LocalFabric") && System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
             try {
                 FabricConnection myConnection = new FabricConnection();
                 HFClient hfclient = HFClient.createNewInstance();
@@ -92,7 +92,7 @@ public class FabricConnectionTest {
 
     @Test
     public void invokeError() {
-        if (System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
+        if (System.getenv().containsKey("ORG_GRADLE_PROJECT_LocalFabric") && System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
             try {
                 FabricConnection myConnection = new FabricConnection();
                 HFClient hfclient = HFClient.createNewInstance();
