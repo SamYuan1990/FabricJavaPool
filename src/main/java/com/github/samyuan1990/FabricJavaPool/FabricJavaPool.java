@@ -16,7 +16,7 @@ import org.hyperledger.fabric.sdk.NetworkConfig;
 import org.hyperledger.fabric.sdk.User;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
 
-public class FabricJavaPool extends GenericObjectPool<Channel> {
+public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
 
     public FabricJavaPool(String configNetworkPath, User appUser, String channel, GenericObjectPoolConfig config) {
             super(new ChannelPoolFactory(configNetworkPath, appUser, channel), config);
@@ -31,7 +31,7 @@ public class FabricJavaPool extends GenericObjectPool<Channel> {
     }
 
 
-    private static class ChannelPoolFactory extends BasePooledObjectFactory<Channel> {
+    private static class ChannelPoolFactory extends BasePooledObjectFactory<FabricConnection> {
 
         private String config_network_path = "";
         private User appUser;
@@ -44,28 +44,31 @@ public class FabricJavaPool extends GenericObjectPool<Channel> {
         }
 
         @Override
-        public Channel create() throws Exception {
-            Channel myChannel;
+        public FabricConnection create() throws Exception {
+            FabricConnection myConnection = new FabricConnection();
             HFClient hfclient = HFClient.createNewInstance();
             CryptoSuite cryptoSuite = CryptoSuite.Factory.getCryptoSuite();
             hfclient.setCryptoSuite(cryptoSuite);
             NetworkConfig networkConfig = NetworkConfig.fromJsonFile(new File(config_network_path));
             hfclient.setUserContext(appUser);
             hfclient.loadChannelFromConfig(channel, networkConfig);
-            myChannel = hfclient.getChannel(channel);
+            Channel myChannel = hfclient.getChannel(channel);
             myChannel.initialize();
-            return myChannel;
+            myConnection.setMychannel(myChannel);
+            myConnection.setUser(appUser);
+            return myConnection;
         }
 
         @Override
-        public PooledObject<Channel> wrap(Channel obj) {
+        public PooledObject<FabricConnection> wrap(FabricConnection obj) {
             return new DefaultPooledObject<>(obj);
         }
 
         @Override
-        public boolean validateObject(final PooledObject<Channel> pooledObject) {
-            Channel pooledObj = pooledObject.getObject();
-            return pooledObj.isInitialized() & !pooledObj.isShutdown();
+        public boolean validateObject(final PooledObject<FabricConnection> pooledObject) {
+            FabricConnection pooledObj = pooledObject.getObject();
+            Channel mychannel = pooledObj.getMychannel();
+            return mychannel.isInitialized() & !mychannel.isShutdown();
         }
     }
 }
