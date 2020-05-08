@@ -45,17 +45,16 @@ public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
 
         @Override
         public FabricConnection create() throws Exception {
-            FabricConnection myConnection = new FabricConnection();
-            HFClient hfclient = HFClient.createNewInstance();
+            FabricConnection myConnection;
             CryptoSuite cryptoSuite = CryptoSuite.Factory.getCryptoSuite();
+            HFClient hfclient = HFClient.createNewInstance();
             hfclient.setCryptoSuite(cryptoSuite);
             NetworkConfig networkConfig = NetworkConfig.fromJsonFile(new File(config_network_path));
             hfclient.setUserContext(appUser);
             hfclient.loadChannelFromConfig(channel, networkConfig);
             Channel myChannel = hfclient.getChannel(channel);
             myChannel.initialize();
-            myConnection.setMychannel(myChannel);
-            myConnection.setUser(appUser);
+            myConnection = new FabricConnection(hfclient, myChannel, appUser);
             return myConnection;
         }
 

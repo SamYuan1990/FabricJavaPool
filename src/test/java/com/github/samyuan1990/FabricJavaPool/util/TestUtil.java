@@ -2,10 +2,12 @@ package com.github.samyuan1990.FabricJavaPool.util;
 
 import java.io.File;
 import java.nio.file.Paths;
+
+import org.hyperledger.fabric.sdk.ChaincodeID;
 import org.hyperledger.fabric.sdk.User;
 import static java.lang.String.format;
 
-public class Util {
+public class TestUtil {
     private static String configUserPath = "./src/test/resources/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore";
 
     public static String myChannel = "mychannel";
@@ -16,7 +18,9 @@ public class Util {
 
     public static String netWorkConfig = "./src/test/resources/Networkconfig.json";
 
-    private Util() {
+    public static ChaincodeID chaincodeID = ChaincodeID.newBuilder().setName(myCC).setVersion(myCCVersion).build();
+
+    private TestUtil() {
     }
 
     public static User getUser() {

@@ -1,19 +1,15 @@
 package com.github.samyuan1990.FabricJavaPool;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.github.samyuan1990.FabricJavaPool.util.Util;
-import com.google.protobuf.ByteString;
+import com.github.samyuan1990.FabricJavaPool.util.TestUtil;
 import org.hyperledger.fabric.protos.peer.FabricProposalResponse;
 import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.ProposalException;
-import org.hyperledger.fabric.sdk.security.CryptoSuite;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.mock;
@@ -23,10 +19,10 @@ public class FabricConnectionTest {
     @Test
     public void getUser() {
         FabricConnection fc = new FabricConnection();
-        fc.setUser(Util.getUser());
+        fc.setUser(TestUtil.getUser());
         User user = fc.getUser();
-        Assert.assertEquals(Util.getUser().getName(), user.getName());
-        Assert.assertEquals(Util.getUser().getEnrollment().getCert(), user.getEnrollment().getCert());
+        Assert.assertEquals(TestUtil.getUser().getName(), user.getName());
+        Assert.assertEquals(TestUtil.getUser().getEnrollment().getCert(), user.getEnrollment().getCert());
     }
 
     @Test
@@ -43,8 +39,8 @@ public class FabricConnectionTest {
         try {
                 FabricConnection myConnection = new FabricConnection();
                 myConnection.setMychannel(mockChannel);
-                myConnection.setUser(Util.getUser());
-                String rs = myConnection.query(Util.myCC, Util.myCCVersion, "query", "a");
+                myConnection.setUser(TestUtil.getUser());
+                String rs = myConnection.query(TestUtil.chaincodeID, "query", "a");
                 Assert.assertEquals("90", rs);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -62,8 +58,8 @@ public class FabricConnectionTest {
         try {
                 FabricConnection myConnection = new FabricConnection();
                 myConnection.setMychannel(mockChannel);
-                myConnection.setUser(Util.getUser());
-                String rs = myConnection.query(Util.myCC, Util.myCCVersion, "error", "a");
+                myConnection.setUser(TestUtil.getUser());
+                String rs = myConnection.query(TestUtil.chaincodeID, "error", "a");
                 Assert.assertEquals("", rs);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -84,8 +80,8 @@ public class FabricConnectionTest {
         try {
                 FabricConnection myConnection = new FabricConnection();
                 myConnection.setMychannel(mockChannel);
-                myConnection.setUser(Util.getUser());
-                String rs = myConnection.invoke(Util.myCC, Util.myCCVersion, "query", "a");
+                myConnection.setUser(TestUtil.getUser());
+                String rs = myConnection.invoke(TestUtil.chaincodeID, "query", "a");
                 Assert.assertEquals("90", rs);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -103,8 +99,8 @@ public class FabricConnectionTest {
             try {
                 FabricConnection myConnection = new FabricConnection();
                 myConnection.setMychannel(mockChannel);
-                myConnection.setUser(Util.getUser());
-                String rs = myConnection.invoke(Util.myCC, Util.myCCVersion, "error", "a");
+                myConnection.setUser(TestUtil.getUser());
+                String rs = myConnection.invoke(TestUtil.chaincodeID, "error", "a");
                 Assert.assertEquals("", rs);
             } catch (Exception e) {
                 e.printStackTrace();

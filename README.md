@@ -17,33 +17,41 @@ Sample usage:
 ```
 	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.1'
 ```
-
+For SNAPSHOT version
 ```
    repositories {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.1-SNAPSHOT'
 ```
-
+Get Connection
 ```
-        ObjectPool<Channel>  myChannelPool= new FabricJavaPool("./src/test/resources/Networkconfig.json",getUser(),"mychannel");
+        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.netWorkConfig, TestUtil.getUser(), TestUtil.myChannel);
         try {
-            Channel myChannel = myChannelPool.borrowObject();
-            assertNotEquals("Test borrow item channel not null",myChannel,null);
-            assertEquals("Test borrow item channel",myChannel.isInitialized(),true);
-            Channel myChannel2 = myChannelPool.borrowObject();
-            assertNotEquals("Test borrow item channel2 not null",myChannel2,null);
-            assertEquals("Test borrow item channel2",myChannel2.isInitialized(),true);
-            assertEquals("Test item should diff",myChannel2.equals(myChannel),false);
-            myChannelPool.returnObject(myChannel);
-            myChannelPool.returnObject(myChannel2);
-            String rs=Query(myChannel,"mycc","query","a");
-            assertEquals("90",rs);
-            String rs2=Query(myChannel2,"mycc","query","a");
-            assertNotEquals("91",rs2);
+            FabricConnection fabricConnection = fabricConnectionPool.borrowObject();
+            FabricConnection fabricConnection2 = fabricConnectionPool.borrowObject();
+            String rs = fabricConnection.query(TestUtil.chaincodeID, "query", "a");
+            String rs2 = fabricConnection2.query(TestUtil.chaincodeID, "query", "a");
+            }
+            fabricConnectionPool.returnObject(fabricConnection);
+            fabricConnectionPool.returnObject(fabricConnection2);
         } catch (Exception e) {
             e.printStackTrace();
         }
+```
+Generate ChaincodeID cci = Util.generateChainCodeID(TestUtil.myCC, TestUtil.myCCVersion); Obj
+```
+        ChaincodeID cci = Util.generateChainCodeID(TestUtil.myCC, TestUtil.myCCVersion);
+```
+Query
+```
+FabricConnection myConnection = myChannelPool.borrowObject();
+String rs = myConnection.query(cci, "query", "a");
+```
+Invoke
+```
+FabricConnection myConnection = myChannelPool.borrowObject();
+String rs = myConnection.invoke(cci, "query", "a");
 ```
 
 # For dev
@@ -60,7 +68,7 @@ Add ect hosts with
 ```
 After change.
 ```
-export ORG\_GRADLE\_PROJECT_LocalFabric=true
+export ORG_GRADLE_PROJECT_LocalFabric=true
 gradle clean build
 ```
 

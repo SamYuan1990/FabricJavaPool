@@ -5,6 +5,18 @@ import org.hyperledger.fabric.sdk.*;
 
 public class FabricConnection {
 
+    public FabricConnection() {
+        this.hfclient = HFClient.createNewInstance();
+    }
+
+    public FabricConnection(HFClient hfclient, Channel mychannel, User user) {
+        this.hfclient = hfclient;
+        this.mychannel = mychannel;
+        this.user = user;
+    }
+
+    private HFClient hfclient;
+
     public Channel getMychannel() {
         return mychannel;
     }
@@ -25,12 +37,8 @@ public class FabricConnection {
 
     private User user;
 
-    public String query(String chainCodeName, String chainCodeVersion, String fcn, String... arguments)  throws Exception {
+    public String query(ChaincodeID chaincodeID, String fcn, String... arguments)  throws Exception {
         String payload = "";
-        ChaincodeID chaincodeID = ChaincodeID.newBuilder().setName(chainCodeName)
-                    .setVersion(chainCodeVersion)
-                    .build();
-        HFClient hfclient = HFClient.createNewInstance();
         QueryByChaincodeRequest transactionProposalRequest = hfclient.newQueryProposalRequest();
         transactionProposalRequest.setChaincodeID(chaincodeID);
         transactionProposalRequest.setFcn(fcn);
@@ -46,12 +54,8 @@ public class FabricConnection {
         return payload;
     }
 
-    public String invoke(String chaincodeName, String chainCodeVersion, String fcn, String... arguments) throws Exception {
+    public String invoke(ChaincodeID chaincodeID, String fcn, String... arguments) throws Exception {
         String payload = "";
-        ChaincodeID chaincodeID = ChaincodeID.newBuilder().setName(chaincodeName)
-                    .setVersion(chainCodeVersion)
-                    .build();
-        HFClient hfclient = HFClient.createNewInstance();
         TransactionProposalRequest transactionProposalRequest = hfclient.newTransactionProposalRequest();
         transactionProposalRequest.setChaincodeID(chaincodeID);
         transactionProposalRequest.setFcn(fcn);
