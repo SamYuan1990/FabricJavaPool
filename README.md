@@ -24,9 +24,21 @@ For SNAPSHOT version
     }
 	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.1-SNAPSHOT'
 ```
+
+## Pool config
+Fabric network config file in json format and file path as configNetworkPath.
+```
+configNetworkPath=./src/test/resources/Networkconfig.json
+maxTotal=10
+maxIdle=8
+minIdle=2
+maxWaitMillis=1000
+```
+
 ## Get Connection
 ```
-        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.netWorkConfig, TestUtil.getUser(), TestUtil.myChannel);
+        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel);
+        // By Default it will read pool config from ./resources/FabricJavaPool.properties
         try {
             FabricConnection fabricConnection = fabricConnectionPool.borrowObject();
             FabricConnection fabricConnection2 = fabricConnectionPool.borrowObject();

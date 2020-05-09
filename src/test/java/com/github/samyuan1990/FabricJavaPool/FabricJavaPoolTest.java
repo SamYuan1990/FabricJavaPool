@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class FabricJavaPoolTest {
 
     @Test public void testChannelPool() {
-        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.netWorkConfig, TestUtil.getUser(), TestUtil.myChannel);
+        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel);
         try {
             FabricConnection fabricConnection = fabricConnectionPool.borrowObject();
             assertNotEquals("Test borrow item channel not null", fabricConnection, null);
@@ -38,7 +38,7 @@ public class FabricJavaPoolTest {
     }
 
     @Test public void testChannelPoolException() {
-        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool("./src/test/resources/Networkconfig.json", null, TestUtil.myChannel);
+        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(null, TestUtil.myChannel);
         try {
             fabricConnectionPool.borrowObject();
         } catch (Exception e) {
@@ -47,10 +47,10 @@ public class FabricJavaPoolTest {
     }
 
     @Test public void testChannelPoolBorrow() {
-        GenericObjectPoolConfig config = new GenericObjectPoolConfig();
+        FabricJavaPoolConfig config = new FabricJavaPoolConfig();
         config.setMaxTotal(5);
         config.setMaxWaitMillis(1000);
-        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool("./src/test/resources/Networkconfig.json", TestUtil.getUser(), TestUtil.myChannel, config);
+        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel, config);
         try {
             for (int i = 0; i < 5; i++) {
                 FabricConnection o = fabricConnectionPool.borrowObject();
