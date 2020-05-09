@@ -22,9 +22,9 @@ public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
             super(new ChannelPoolFactory(configNetworkPath, appUser, channel), config);
     }
 
-    public FabricJavaPool(String configNetworkPath, User appUser, String channel, GenericObjectPoolConfig config, AbandonedConfig abandonedConfig) {
+    /*public FabricJavaPool(String configNetworkPath, User appUser, String channel, GenericObjectPoolConfig config, AbandonedConfig abandonedConfig) {
             super(new ChannelPoolFactory(configNetworkPath, appUser, channel), config, abandonedConfig);
-    }
+    }*/
 
     public FabricJavaPool(String configNetworkPath, User appUser, String channel) {
             super(new ChannelPoolFactory(configNetworkPath, appUser, channel));
@@ -63,11 +63,11 @@ public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
             return new DefaultPooledObject<>(obj);
         }
 
-        @Override
+        /*@Override
         public boolean validateObject(final PooledObject<FabricConnection> pooledObject) {
             FabricConnection pooledObj = pooledObject.getObject();
             Channel mychannel = pooledObj.getMychannel();
             return mychannel.isInitialized() & !mychannel.isShutdown();
-        }
+        }*/
     }
 }

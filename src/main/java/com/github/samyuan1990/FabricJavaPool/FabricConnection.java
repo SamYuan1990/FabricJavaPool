@@ -2,6 +2,8 @@ package com.github.samyuan1990.FabricJavaPool;
 
 import java.util.Collection;
 import org.hyperledger.fabric.sdk.*;
+import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
+import org.hyperledger.fabric.sdk.exception.ProposalException;
 
 public class FabricConnection {
 
@@ -37,25 +39,17 @@ public class FabricConnection {
 
     private User user;
 
-    public String query(ChaincodeID chaincodeID, String fcn, String... arguments)  throws Exception {
-        String payload = "";
+    public ExecuteResult query(ChaincodeID chaincodeID, String fcn, String... arguments) throws RunTimeException, ProposalException, InvalidArgumentException {
         QueryByChaincodeRequest transactionProposalRequest = hfclient.newQueryProposalRequest();
         transactionProposalRequest.setChaincodeID(chaincodeID);
         transactionProposalRequest.setFcn(fcn);
         transactionProposalRequest.setArgs(arguments);
         transactionProposalRequest.setUserContext(getUser());
         Collection<ProposalResponse> queryPropResp = getMychannel().queryByChaincode(transactionProposalRequest);
-        for (ProposalResponse response:queryPropResp) {
-            if (response.getStatus() == ChaincodeResponse.Status.SUCCESS) {
-                payload = response.getProposalResponse().getResponse().getPayload().toStringUtf8();
-                return payload;
-            }
-        }
-        return payload;
+        return processProposalResponses(queryPropResp);
     }
 
-    public String invoke(ChaincodeID chaincodeID, String fcn, String... arguments) throws Exception {
-        String payload = "";
+    public ExecuteResult invoke(ChaincodeID chaincodeID, String fcn, String... arguments) throws RunTimeException, ProposalException, InvalidArgumentException {
         TransactionProposalRequest transactionProposalRequest = hfclient.newTransactionProposalRequest();
         transactionProposalRequest.setChaincodeID(chaincodeID);
         transactionProposalRequest.setFcn(fcn);
@@ -63,14 +57,28 @@ public class FabricConnection {
         //transactionProposalRequest.setProposalWaitTime(500);
         transactionProposalRequest.setUserContext(getUser());
         Collection<ProposalResponse> invokePropResp = getMychannel().sendTransactionProposal(transactionProposalRequest);
-        for (ProposalResponse response : invokePropResp) {
-            if (response.getStatus() == ChaincodeResponse.Status.SUCCESS) {
-                payload = response.getProposalResponse().getResponse().getPayload().toStringUtf8();
-            } else {
-                return "";
-            }
-        }
+        ExecuteResult eR = processProposalResponses(invokePropResp);
         getMychannel().sendTransaction(invokePropResp); //CompletableFuture<BlockEvent.TransactionEvent> events
-        return payload;
+        return eR;
+    }
+
+    private ExecuteResult processProposalResponses(Collection<ProposalResponse> propResp) throws RunTimeException {
+        String payload = "";
+        int i = 0;
+        for (ProposalResponse response : propResp) {
+            if (response.getStatus() == ChaincodeResponse.Status.SUCCESS) {
+                if (i == 0) {
+                    payload = response.getProposalResponse().getResponse().getPayload().toStringUtf8();
+                }
+                String currentPayload = response.getProposalResponse().getResponse().getPayload().toStringUtf8();
+                if (null != payload && null != currentPayload && !payload.equals(currentPayload)) {
+                    throw new RunTimeException(response.getStatus(), Util.resultOnPeersDiff);
+                }
+            } else {
+                throw new RunTimeException(response.getStatus(), Util.errorHappenDuringQuery);
+            }
+            i++;
+        }
+        return new ExecuteResult(payload, propResp);
     }
 }

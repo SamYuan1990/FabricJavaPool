@@ -40,15 +40,44 @@ public class FabricConnectionTest {
                 FabricConnection myConnection = new FabricConnection();
                 myConnection.setMychannel(mockChannel);
                 myConnection.setUser(TestUtil.getUser());
-                String rs = myConnection.query(TestUtil.chaincodeID, "query", "a");
-                Assert.assertEquals("90", rs);
-            } catch (Exception e) {
+                ExecuteResult rs = myConnection.query(TestUtil.chaincodeID, "query", "a");
+                Assert.assertEquals("90", rs.getResult());
+                Assert.assertEquals(queryPropResp, rs.getPropResp());
+        } catch (RunTimeException e) {
                 e.printStackTrace();
             }
     }
 
     @Test
-    public void queryEmpty()  throws ProposalException, InvalidArgumentException {
+    public void queryErrorDealToPeers()  throws ProposalException, InvalidArgumentException {
+        Channel mockChannel = mock(Channel.class);
+        ProposalResponse mockProposalResponse0 = mock(ProposalResponse.class);
+        ProposalResponse mockProposalResponse1 = mock(ProposalResponse.class);
+        Mockito.when(mockProposalResponse0.getStatus()).thenReturn(ChaincodeResponse.Status.SUCCESS);
+        Mockito.when(mockProposalResponse0.getProposalResponse()).thenReturn(FabricProposalResponse.ProposalResponse.newBuilder().
+                setResponse(org.hyperledger.fabric.protos.peer.FabricProposalResponse.Response.newBuilder().setMessage("90").setStatus(1).setPayload(com.google.protobuf.ByteString.copyFromUtf8("90")))
+                .setPayload(com.google.protobuf.ByteString.copyFromUtf8("90")).build());
+        Mockito.when(mockProposalResponse1.getStatus()).thenReturn(ChaincodeResponse.Status.SUCCESS);
+        Mockito.when(mockProposalResponse1.getProposalResponse()).thenReturn(FabricProposalResponse.ProposalResponse.newBuilder().
+                setResponse(org.hyperledger.fabric.protos.peer.FabricProposalResponse.Response.newBuilder().setMessage("91").setStatus(1).setPayload(com.google.protobuf.ByteString.copyFromUtf8("91")))
+                .setPayload(com.google.protobuf.ByteString.copyFromUtf8("91")).build());
+        Collection<ProposalResponse> queryPropResp = new ArrayList<ProposalResponse>();
+        queryPropResp.add(mockProposalResponse0);
+        queryPropResp.add(mockProposalResponse1);
+        Mockito.when(mockChannel.queryByChaincode(Mockito.any())).thenReturn(queryPropResp);
+        try {
+            FabricConnection myConnection = new FabricConnection();
+            myConnection.setMychannel(mockChannel);
+            myConnection.setUser(TestUtil.getUser());
+            myConnection.query(TestUtil.chaincodeID, "query", "a");
+        } catch (RunTimeException e) {
+            Assert.assertEquals(ChaincodeResponse.Status.SUCCESS, e.getStatus());
+            Assert.assertEquals(Util.resultOnPeersDiff, e.getMsg());
+        }
+    }
+
+    @Test
+    public void queryError()  throws ProposalException, InvalidArgumentException {
         Channel mockChannel = mock(Channel.class);
         ProposalResponse mockProposalResponse = mock(ProposalResponse.class);
         Collection<ProposalResponse> queryPropResp = new ArrayList<ProposalResponse>();
@@ -59,11 +88,12 @@ public class FabricConnectionTest {
                 FabricConnection myConnection = new FabricConnection();
                 myConnection.setMychannel(mockChannel);
                 myConnection.setUser(TestUtil.getUser());
-                String rs = myConnection.query(TestUtil.chaincodeID, "error", "a");
-                Assert.assertEquals("", rs);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                myConnection.query(TestUtil.chaincodeID, "error", "a");
+                //Assert.assertEquals("", rs.getResult());
+            } catch (RunTimeException e) {
+                Assert.assertEquals(ChaincodeResponse.Status.FAILURE, e.getStatus());
+                Assert.assertEquals(Util.errorHappenDuringQuery, e.getMsg());
+        }
     }
 
     @Test
@@ -81,9 +111,10 @@ public class FabricConnectionTest {
                 FabricConnection myConnection = new FabricConnection();
                 myConnection.setMychannel(mockChannel);
                 myConnection.setUser(TestUtil.getUser());
-                String rs = myConnection.invoke(TestUtil.chaincodeID, "query", "a");
-                Assert.assertEquals("90", rs);
-            } catch (Exception e) {
+                ExecuteResult rs = myConnection.invoke(TestUtil.chaincodeID, "query", "a");
+                Assert.assertEquals("90", rs.getResult());
+                Assert.assertEquals(queryPropResp, rs.getPropResp());
+        } catch (RunTimeException e) {
                 e.printStackTrace();
             }
     }
@@ -100,10 +131,10 @@ public class FabricConnectionTest {
                 FabricConnection myConnection = new FabricConnection();
                 myConnection.setMychannel(mockChannel);
                 myConnection.setUser(TestUtil.getUser());
-                String rs = myConnection.invoke(TestUtil.chaincodeID, "error", "a");
-                Assert.assertEquals("", rs);
-            } catch (Exception e) {
-                e.printStackTrace();
+                myConnection.invoke(TestUtil.chaincodeID, "error", "a");
+            } catch (RunTimeException e) {
+                Assert.assertEquals(ChaincodeResponse.Status.FAILURE, e.getStatus());
+                Assert.assertEquals(Util.errorHappenDuringQuery, e.getMsg());
             }
     }
 }
