@@ -1,19 +1,19 @@
 # FabricJavaPool
 **A Connection pool manager for Fabric development**
 
-based on [fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java) 
+based on [fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)  1.4.6 and JDK8
 following design of JDBC
+Basing common pool and Fabric Java SDK.
+Will provide you a config and a pool object of channel obj base on User.
+Mostly used as query chain code for a specific user.
 
 # Why
 Assuming we have a webUI for client, and the UI need request times to fabric network to fetch data.
 For performance exception, we don't want to have IO session many times.
 So a connection pool basing on user's msp, and try to reuse the connection on java server side by session or cookie. 
 
-# How
-Basing common pool and Fabric Java SDK.
-Will provide you a config and a pool object of channel obj base on User.
-Mostly used as query chain code for a specific user.
-Sample usage:
+# Sample usage:
+## Gradle
 ```
 	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.1'
 ```
@@ -24,7 +24,7 @@ For SNAPSHOT version
     }
 	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.1-SNAPSHOT'
 ```
-Get Connection
+## Get Connection
 ```
         ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.netWorkConfig, TestUtil.getUser(), TestUtil.myChannel);
         try {
@@ -39,30 +39,30 @@ Get Connection
             e.printStackTrace();
         }
 ```
-Generate ChaincodeID cci = Util.generateChainCodeID(TestUtil.myCC, TestUtil.myCCVersion); Obj
+## Make ChainCode
 ```
         ChaincodeID cci = Util.generateChainCodeID(TestUtil.myCC, TestUtil.myCCVersion);
 ```
-Query
+## Query
 ```
 FabricConnection myConnection = myChannelPool.borrowObject();
 ExecuteResult rs = myConnection.query(cci, "query", "a");
 Assert.assertEquals("90", rs.getResult());
 ```
-Invoke
+## Invoke
 ```
 FabricConnection myConnection = myChannelPool.borrowObject();
 ExecuteResult rs = myConnection.invoke(cci, "query", "a");
 Assert.assertEquals("90", rs.getResult());
 ```
-Query or Invoke exception
+## Query or Invoke exception
 ```
                 myConnection.invoke(TestUtil.chaincodeID, "error", "a");
             } catch (RunTimeException e) {
                 Assert.assertEquals(ChaincodeResponse.Status.FAILURE, e.getStatus());
                 Assert.assertEquals(Util.errorHappenDuringQuery, e.getMsg());
 ```
-Query or Invoke exception due to chaincode results are different on peers
+## Query or Invoke exception due to chaincode results are different on peers
 ```
             myConnection.query(TestUtil.chaincodeID, "query", "a");
         } catch (RunTimeException e) {
@@ -71,7 +71,12 @@ Query or Invoke exception due to chaincode results are different on peers
         }
 ```
 
-# For dev
+# For develop this project
+```
+gradle clean build
+```
+Optional:
+
 Copy crypto-config to your local byfn
 ```
 byfn.sh up
@@ -88,10 +93,6 @@ After change.
 export ORG_GRADLE_PROJECT_LocalFabric=true
 gradle clean build
 ```
-
-# Supported version
-Jdk 8
-Fabric 1.4.6
 
 # Version
 0.0.1 as basic version
