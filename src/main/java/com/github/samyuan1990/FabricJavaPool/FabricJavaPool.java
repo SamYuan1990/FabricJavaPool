@@ -18,18 +18,13 @@ import org.hyperledger.fabric.sdk.security.CryptoSuite;
 
 public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
 
-    public FabricJavaPool(String configNetworkPath, User appUser, String channel, GenericObjectPoolConfig config) {
-            super(new ChannelPoolFactory(configNetworkPath, appUser, channel), config);
+    public FabricJavaPool(User appUser, String channel) {
+        super(new ChannelPoolFactory(new FabricJavaPoolConfig().getConfigNetworkPath(), appUser, channel), new FabricJavaPoolConfig());
     }
 
-    /*public FabricJavaPool(String configNetworkPath, User appUser, String channel, GenericObjectPoolConfig config, AbandonedConfig abandonedConfig) {
-            super(new ChannelPoolFactory(configNetworkPath, appUser, channel), config, abandonedConfig);
-    }*/
-
-    public FabricJavaPool(String configNetworkPath, User appUser, String channel) {
-            super(new ChannelPoolFactory(configNetworkPath, appUser, channel));
+    public FabricJavaPool(User appUser, String channel, FabricJavaPoolConfig config) {
+        super(new ChannelPoolFactory(config.getConfigNetworkPath(), appUser, channel), config);
     }
-
 
     private static class ChannelPoolFactory extends BasePooledObjectFactory<FabricConnection> {
 
