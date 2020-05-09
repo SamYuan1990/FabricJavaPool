@@ -46,12 +46,29 @@ Generate ChaincodeID cci = Util.generateChainCodeID(TestUtil.myCC, TestUtil.myCC
 Query
 ```
 FabricConnection myConnection = myChannelPool.borrowObject();
-String rs = myConnection.query(cci, "query", "a");
+ExecuteResult rs = myConnection.query(cci, "query", "a");
+Assert.assertEquals("90", rs.getResult());
 ```
 Invoke
 ```
 FabricConnection myConnection = myChannelPool.borrowObject();
-String rs = myConnection.invoke(cci, "query", "a");
+ExecuteResult rs = myConnection.invoke(cci, "query", "a");
+Assert.assertEquals("90", rs.getResult());
+```
+Query or Invoke exception
+```
+                myConnection.invoke(TestUtil.chaincodeID, "error", "a");
+            } catch (RunTimeException e) {
+                Assert.assertEquals(ChaincodeResponse.Status.FAILURE, e.getStatus());
+                Assert.assertEquals(Util.errorHappenDuringQuery, e.getMsg());
+```
+Query or Invoke exception due to chaincode results are different on peers
+```
+            myConnection.query(TestUtil.chaincodeID, "query", "a");
+        } catch (RunTimeException e) {
+            Assert.assertEquals(ChaincodeResponse.Status.SUCCESS, e.getStatus());
+            Assert.assertEquals(Util.resultOnPeersDiff, e.getMsg());
+        }
 ```
 
 # For dev

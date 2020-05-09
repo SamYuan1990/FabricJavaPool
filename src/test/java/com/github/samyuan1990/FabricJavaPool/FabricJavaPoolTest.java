@@ -24,11 +24,11 @@ public class FabricJavaPoolTest {
             assertEquals("Test item should diff", fabricConnection2.equals(fabricConnection), false);
             System.out.println(System.getenv("ORG_GRADLE_PROJECT_LocalFabric"));
             if (System.getenv().containsKey("ORG_GRADLE_PROJECT_LocalFabric") && System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
-                String rs = fabricConnection.query(TestUtil.chaincodeID, "query", "a");
-                assertEquals("90", rs);
+                ExecuteResult rs = fabricConnection.query(TestUtil.chaincodeID, "query", "a");
+                assertEquals("90", rs.getResult());
                 System.out.println(rs);
-                String rs2 = fabricConnection2.query(TestUtil.chaincodeID, "query", "a");
-                assertNotEquals("91", rs2);
+                ExecuteResult rs2 = fabricConnection2.query(TestUtil.chaincodeID, "query", "a");
+                assertNotEquals("91", rs2.getResult());
             }
             fabricConnectionPool.returnObject(fabricConnection);
             fabricConnectionPool.returnObject(fabricConnection2);
