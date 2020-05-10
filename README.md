@@ -15,14 +15,14 @@ So a connection pool basing on user's msp, and try to reuse the connection on ja
 # Sample usage:
 ## Gradle
 ```
-	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.1'
+	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.2'
 ```
 For SNAPSHOT version
 ```
    repositories {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
-	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.1-SNAPSHOT'
+	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.2-SNAPSHOT'
 ```
 
 ## Pool config
