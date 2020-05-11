@@ -16,6 +16,8 @@ public class TestUtil {
 
     public static String myCCVersion = "1.0";
 
+    public static String userName = "Admin@org1.example.com";
+
     public static String netWorkConfig = "./src/test/resources/Networkconfig.json";
 
     public static ChaincodeID chaincodeID = ChaincodeID.newBuilder().setName(myCC).setVersion(myCCVersion).build();

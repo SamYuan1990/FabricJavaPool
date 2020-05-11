@@ -1,6 +1,5 @@
 package com.github.samyuan1990.FabricJavaPool;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -21,6 +20,16 @@ public class FabricJavaPoolConfig extends GenericObjectPoolConfig {
     private String configNetworkPath;
     private Properties properties;
 
+    public void setWalletPath(String walletPath) {
+        this.walletPath = walletPath;
+    }
+
+    public String getWalletPath() {
+        return walletPath;
+    }
+
+    private String walletPath;
+
     public FabricJavaPoolConfig(String configNetworkPath) {
         super();
         this.setConfigNetworkPath(configNetworkPath);
@@ -36,6 +45,7 @@ public class FabricJavaPoolConfig extends GenericObjectPoolConfig {
             Properties properties = new Properties();
             properties.load(in);
             this.setConfigNetworkPath(properties.getProperty("configNetworkPath"));
+            this.setWalletPath(properties.getProperty("walletPath"));
             this.setMaxTotal(Integer.valueOf(properties.getProperty("maxTotal")).intValue());
             this.setMaxIdle(Integer.valueOf(properties.getProperty("maxIdle")).intValue());
             this.setMinIdle(Integer.valueOf(properties.getProperty("minIdle")).intValue());
@@ -44,4 +54,5 @@ public class FabricJavaPoolConfig extends GenericObjectPoolConfig {
             e.printStackTrace();
         }
     }
+
 }
