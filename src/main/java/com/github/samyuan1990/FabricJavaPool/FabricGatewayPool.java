@@ -51,8 +51,6 @@ public class FabricGatewayPool extends GenericObjectPool<FabricContractConnectIm
                     .identity(wallet, userName)
                     .networkConfig(networkConfigFile);
 
-            System.out.println(wallet.get(userName));
-
             // Create a gateway connection
             Gateway gateway = builder.connect();
 
