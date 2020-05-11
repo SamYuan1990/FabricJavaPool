@@ -54,7 +54,6 @@ public class FabricConnection {
         transactionProposalRequest.setChaincodeID(chaincodeID);
         transactionProposalRequest.setFcn(fcn);
         transactionProposalRequest.setArgs(arguments);
-        //transactionProposalRequest.setProposalWaitTime(500);
         transactionProposalRequest.setUserContext(getUser());
         Collection<ProposalResponse> invokePropResp = getMychannel().sendTransactionProposal(transactionProposalRequest);
         ExecuteResult eR = processProposalResponses(invokePropResp);

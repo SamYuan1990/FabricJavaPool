@@ -89,7 +89,6 @@ public class FabricConnectionTest {
                 myConnection.setMychannel(mockChannel);
                 myConnection.setUser(TestUtil.getUser());
                 myConnection.query(TestUtil.chaincodeID, "error", "a");
-                //Assert.assertEquals("", rs.getResult());
             } catch (RunTimeException e) {
                 Assert.assertEquals(ChaincodeResponse.Status.FAILURE, e.getStatus());
                 Assert.assertEquals(Util.errorHappenDuringQuery, e.getMsg());

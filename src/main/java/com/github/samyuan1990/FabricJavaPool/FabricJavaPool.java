@@ -6,10 +6,8 @@ package com.github.samyuan1990.FabricJavaPool;
 import java.io.File;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
-import org.apache.commons.pool2.impl.AbandonedConfig;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.hyperledger.fabric.sdk.Channel;
 import org.hyperledger.fabric.sdk.HFClient;
 import org.hyperledger.fabric.sdk.NetworkConfig;
@@ -58,11 +56,5 @@ public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
             return new DefaultPooledObject<>(obj);
         }
 
-        /*@Override
-        public boolean validateObject(final PooledObject<FabricConnection> pooledObject) {
-            FabricConnection pooledObj = pooledObject.getObject();
-            Channel mychannel = pooledObj.getMychannel();
-            return mychannel.isInitialized() & !mychannel.isShutdown();
-        }*/
     }
 }
