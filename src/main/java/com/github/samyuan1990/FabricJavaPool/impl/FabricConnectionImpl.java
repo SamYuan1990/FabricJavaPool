@@ -1,17 +1,20 @@
-package com.github.samyuan1990.FabricJavaPool;
+package com.github.samyuan1990.FabricJavaPool.impl;
 
 import java.util.Collection;
+
+import com.github.samyuan1990.FabricJavaPool.ExecuteResult;
+import com.github.samyuan1990.FabricJavaPool.RunTimeException;
+import com.github.samyuan1990.FabricJavaPool.Util;
+import com.github.samyuan1990.FabricJavaPool.api.FabricConnection;
 import org.hyperledger.fabric.sdk.*;
-import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
-import org.hyperledger.fabric.sdk.exception.ProposalException;
 
-public class FabricConnection {
+public class FabricConnectionImpl implements FabricConnection {
 
-    public FabricConnection() {
+    public FabricConnectionImpl() {
         this.hfclient = HFClient.createNewInstance();
     }
 
-    public FabricConnection(HFClient hfclient, Channel mychannel, User user) {
+    public FabricConnectionImpl(HFClient hfclient, Channel mychannel, User user) {
         this.hfclient = hfclient;
         this.mychannel = mychannel;
         this.user = user;
@@ -39,7 +42,12 @@ public class FabricConnection {
 
     private User user;
 
-    public ExecuteResult query(ChaincodeID chaincodeID, String fcn, String... arguments) throws RunTimeException, ProposalException, InvalidArgumentException {
+    public ExecuteResult query(String chainCode, String fcn, String... arguments) throws Exception {
+        ChaincodeID cci = ChaincodeID.newBuilder().setName(chainCode).build();
+        return this.query(cci, fcn, arguments);
+    }
+
+    public ExecuteResult query(ChaincodeID chaincodeID, String fcn, String... arguments) throws Exception {
         QueryByChaincodeRequest transactionProposalRequest = hfclient.newQueryProposalRequest();
         transactionProposalRequest.setChaincodeID(chaincodeID);
         transactionProposalRequest.setFcn(fcn);
@@ -49,7 +57,7 @@ public class FabricConnection {
         return processProposalResponses(queryPropResp);
     }
 
-    public ExecuteResult invoke(ChaincodeID chaincodeID, String fcn, String... arguments) throws RunTimeException, ProposalException, InvalidArgumentException {
+    public ExecuteResult invoke(ChaincodeID chaincodeID, String fcn, String... arguments) throws Exception {
         TransactionProposalRequest transactionProposalRequest = hfclient.newTransactionProposalRequest();
         transactionProposalRequest.setChaincodeID(chaincodeID);
         transactionProposalRequest.setFcn(fcn);
@@ -59,6 +67,11 @@ public class FabricConnection {
         ExecuteResult eR = processProposalResponses(invokePropResp);
         getMychannel().sendTransaction(invokePropResp); //CompletableFuture<BlockEvent.TransactionEvent> events
         return eR;
+    }
+
+    public ExecuteResult invoke(String chainCode, String fcn, String... arguments) throws Exception {
+        ChaincodeID cci = ChaincodeID.newBuilder().setName(chainCode).build();
+        return this.invoke(cci, fcn, arguments);
     }
 
     private ExecuteResult processProposalResponses(Collection<ProposalResponse> propResp) throws RunTimeException {

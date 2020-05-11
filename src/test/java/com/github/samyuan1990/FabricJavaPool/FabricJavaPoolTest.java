@@ -3,9 +3,9 @@
  */
 package com.github.samyuan1990.FabricJavaPool;
 
+import com.github.samyuan1990.FabricJavaPool.impl.FabricConnectionImpl;
 import com.github.samyuan1990.FabricJavaPool.util.TestUtil;
 import org.apache.commons.pool2.ObjectPool;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
@@ -13,32 +13,32 @@ import static org.junit.Assert.assertEquals;
 public class FabricJavaPoolTest {
 
     @Test public void testChannelPool() {
-        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel);
+        ObjectPool<FabricConnectionImpl>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel);
         try {
-            FabricConnection fabricConnection = fabricConnectionPool.borrowObject();
-            assertNotEquals("Test borrow item channel not null", fabricConnection, null);
-            assertEquals("Test borrow item channel", fabricConnection.getMychannel().isInitialized(), true);
-            FabricConnection fabricConnection2 = fabricConnectionPool.borrowObject();
-            assertNotEquals("Test borrow item channel2 not null", fabricConnection2, null);
-            assertEquals("Test borrow item channel2", fabricConnection2.getMychannel().isInitialized(), true);
-            assertEquals("Test item should diff", fabricConnection2.equals(fabricConnection), false);
+            FabricConnectionImpl fabricConnectionImpl = fabricConnectionPool.borrowObject();
+            assertNotEquals("Test borrow item channel not null", fabricConnectionImpl, null);
+            assertEquals("Test borrow item channel", fabricConnectionImpl.getMychannel().isInitialized(), true);
+            FabricConnectionImpl fabricConnectionImpl2 = fabricConnectionPool.borrowObject();
+            assertNotEquals("Test borrow item channel2 not null", fabricConnectionImpl2, null);
+            assertEquals("Test borrow item channel2", fabricConnectionImpl2.getMychannel().isInitialized(), true);
+            assertEquals("Test item should diff", fabricConnectionImpl2.equals(fabricConnectionImpl), false);
             System.out.println(System.getenv("ORG_GRADLE_PROJECT_LocalFabric"));
             if (System.getenv().containsKey("ORG_GRADLE_PROJECT_LocalFabric") && System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
-                ExecuteResult rs = fabricConnection.query(TestUtil.chaincodeID, "query", "a");
+                ExecuteResult rs = fabricConnectionImpl.query(TestUtil.chaincodeID, "query", "a");
                 assertEquals("90", rs.getResult());
                 System.out.println(rs);
-                ExecuteResult rs2 = fabricConnection2.query(TestUtil.chaincodeID, "query", "a");
+                ExecuteResult rs2 = fabricConnectionImpl2.query(TestUtil.chaincodeID, "query", "a");
                 assertNotEquals("91", rs2.getResult());
             }
-            fabricConnectionPool.returnObject(fabricConnection);
-            fabricConnectionPool.returnObject(fabricConnection2);
+            fabricConnectionPool.returnObject(fabricConnectionImpl);
+            fabricConnectionPool.returnObject(fabricConnectionImpl2);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Test public void testChannelPoolException() {
-        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(null, TestUtil.myChannel);
+        ObjectPool<FabricConnectionImpl>  fabricConnectionPool = new FabricJavaPool(null, TestUtil.myChannel);
         try {
             fabricConnectionPool.borrowObject();
         } catch (Exception e) {
@@ -50,10 +50,10 @@ public class FabricJavaPoolTest {
         FabricJavaPoolConfig config = new FabricJavaPoolConfig();
         config.setMaxTotal(5);
         config.setMaxWaitMillis(1000);
-        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel, config);
+        ObjectPool<FabricConnectionImpl>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel, config);
         try {
             for (int i = 0; i < 5; i++) {
-                FabricConnection o = fabricConnectionPool.borrowObject();
+                FabricConnectionImpl o = fabricConnectionPool.borrowObject();
                 assertNotNull(o);
             }
         } catch (Exception e) {

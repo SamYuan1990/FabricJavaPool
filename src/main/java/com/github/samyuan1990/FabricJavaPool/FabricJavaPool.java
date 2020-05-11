@@ -4,6 +4,8 @@
 package com.github.samyuan1990.FabricJavaPool;
 
 import java.io.File;
+
+import com.github.samyuan1990.FabricJavaPool.impl.FabricConnectionImpl;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
@@ -14,7 +16,7 @@ import org.hyperledger.fabric.sdk.NetworkConfig;
 import org.hyperledger.fabric.sdk.User;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
 
-public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
+public class FabricJavaPool extends GenericObjectPool<FabricConnectionImpl> {
 
     public FabricJavaPool(User appUser, String channel) {
         super(new ChannelPoolFactory(new FabricJavaPoolConfig().getConfigNetworkPath(), appUser, channel), new FabricJavaPoolConfig());
@@ -24,7 +26,7 @@ public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
         super(new ChannelPoolFactory(config.getConfigNetworkPath(), appUser, channel), config);
     }
 
-    private static class ChannelPoolFactory extends BasePooledObjectFactory<FabricConnection> {
+    private static class ChannelPoolFactory extends BasePooledObjectFactory<FabricConnectionImpl> {
 
         private String config_network_path = "";
         private User appUser;
@@ -37,8 +39,8 @@ public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
         }
 
         @Override
-        public FabricConnection create() throws Exception {
-            FabricConnection myConnection;
+        public FabricConnectionImpl create() throws Exception {
+            FabricConnectionImpl myConnection;
             CryptoSuite cryptoSuite = CryptoSuite.Factory.getCryptoSuite();
             HFClient hfclient = HFClient.createNewInstance();
             hfclient.setCryptoSuite(cryptoSuite);
@@ -47,12 +49,12 @@ public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
             hfclient.loadChannelFromConfig(channel, networkConfig);
             Channel myChannel = hfclient.getChannel(channel);
             myChannel.initialize();
-            myConnection = new FabricConnection(hfclient, myChannel, appUser);
+            myConnection = new FabricConnectionImpl(hfclient, myChannel, appUser);
             return myConnection;
         }
 
         @Override
-        public PooledObject<FabricConnection> wrap(FabricConnection obj) {
+        public PooledObject<FabricConnectionImpl> wrap(FabricConnectionImpl obj) {
             return new DefaultPooledObject<>(obj);
         }
 

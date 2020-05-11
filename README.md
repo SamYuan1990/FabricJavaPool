@@ -40,13 +40,13 @@ maxWaitMillis=1000
         ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel);
         // By Default it will read pool config from ./resources/FabricJavaPool.properties
         try {
-            FabricConnection fabricConnection = fabricConnectionPool.borrowObject();
-            FabricConnection fabricConnection2 = fabricConnectionPool.borrowObject();
-            String rs = fabricConnection.query(TestUtil.chaincodeID, "query", "a");
-            String rs2 = fabricConnection2.query(TestUtil.chaincodeID, "query", "a");
+            FabricConnection fabricConnectionImpl = fabricConnectionPool.borrowObject();
+            FabricConnection fabricConnectionImpl2 = fabricConnectionPool.borrowObject();
+            String rs = fabricConnectionImpl.query(TestUtil.chaincodeID, "query", "a");
+            String rs2 = fabricConnectionImpl2.query(TestUtil.chaincodeID, "query", "a");
             }
-            fabricConnectionPool.returnObject(fabricConnection);
-            fabricConnectionPool.returnObject(fabricConnection2);
+            fabricConnectionPool.returnObject(fabricConnectionImpl);
+            fabricConnectionPool.returnObject(fabricConnectionImpl2);
         } catch (Exception e) {
             e.printStackTrace();
         }
