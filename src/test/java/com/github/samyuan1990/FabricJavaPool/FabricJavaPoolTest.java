@@ -3,7 +3,8 @@
  */
 package com.github.samyuan1990.FabricJavaPool;
 
-import com.github.samyuan1990.FabricJavaPool.impl.FabricConnectionImpl;
+import com.github.samyuan1990.FabricJavaPool.Pool.FabricJavaPool;
+import com.github.samyuan1990.FabricJavaPool.api.FabricConnection;
 import com.github.samyuan1990.FabricJavaPool.util.TestUtil;
 import org.apache.commons.pool2.ObjectPool;
 import org.junit.Test;
@@ -13,23 +14,13 @@ import static org.junit.Assert.assertEquals;
 public class FabricJavaPoolTest {
 
     @Test public void testChannelPool() {
-        ObjectPool<FabricConnectionImpl>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel);
+        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel);
         try {
-            FabricConnectionImpl fabricConnectionImpl = fabricConnectionPool.borrowObject();
+            FabricConnection fabricConnectionImpl = fabricConnectionPool.borrowObject();
             assertNotEquals("Test borrow item channel not null", fabricConnectionImpl, null);
-            assertEquals("Test borrow item channel", fabricConnectionImpl.getMychannel().isInitialized(), true);
-            FabricConnectionImpl fabricConnectionImpl2 = fabricConnectionPool.borrowObject();
+            FabricConnection fabricConnectionImpl2 = fabricConnectionPool.borrowObject();
             assertNotEquals("Test borrow item channel2 not null", fabricConnectionImpl2, null);
-            assertEquals("Test borrow item channel2", fabricConnectionImpl2.getMychannel().isInitialized(), true);
             assertEquals("Test item should diff", fabricConnectionImpl2.equals(fabricConnectionImpl), false);
-            System.out.println(System.getenv("ORG_GRADLE_PROJECT_LocalFabric"));
-            if (System.getenv().containsKey("ORG_GRADLE_PROJECT_LocalFabric") && System.getenv("ORG_GRADLE_PROJECT_LocalFabric").equals("true")) {
-                ExecuteResult rs = fabricConnectionImpl.query(TestUtil.chaincodeID, "query", "a");
-                assertEquals("90", rs.getResult());
-                System.out.println(rs);
-                ExecuteResult rs2 = fabricConnectionImpl2.query(TestUtil.chaincodeID, "query", "a");
-                assertNotEquals("91", rs2.getResult());
-            }
             fabricConnectionPool.returnObject(fabricConnectionImpl);
             fabricConnectionPool.returnObject(fabricConnectionImpl2);
         } catch (Exception e) {
@@ -38,7 +29,7 @@ public class FabricJavaPoolTest {
     }
 
     @Test public void testChannelPoolException() {
-        ObjectPool<FabricConnectionImpl>  fabricConnectionPool = new FabricJavaPool(null, TestUtil.myChannel);
+        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(null, TestUtil.myChannel);
         try {
             fabricConnectionPool.borrowObject();
         } catch (Exception e) {
@@ -50,10 +41,10 @@ public class FabricJavaPoolTest {
         FabricJavaPoolConfig config = new FabricJavaPoolConfig();
         config.setMaxTotal(5);
         config.setMaxWaitMillis(1000);
-        ObjectPool<FabricConnectionImpl>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel, config);
+        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel, config);
         try {
             for (int i = 0; i < 5; i++) {
-                FabricConnectionImpl o = fabricConnectionPool.borrowObject();
+                FabricConnection o = fabricConnectionPool.borrowObject();
                 assertNotNull(o);
             }
         } catch (Exception e) {
