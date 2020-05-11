@@ -19,20 +19,20 @@ import org.hyperledger.fabric.sdk.security.CryptoSuite;
 public class FabricJavaPool extends GenericObjectPool<FabricConnectionImpl> {
 
     public FabricJavaPool(User appUser, String channel) {
-        super(new ChannelPoolFactory(new FabricJavaPoolConfig().getConfigNetworkPath(), appUser, channel), new FabricJavaPoolConfig());
+        super(new ConnectionPoolFactory(new FabricJavaPoolConfig().getConfigNetworkPath(), appUser, channel), new FabricJavaPoolConfig());
     }
 
     public FabricJavaPool(User appUser, String channel, FabricJavaPoolConfig config) {
-        super(new ChannelPoolFactory(config.getConfigNetworkPath(), appUser, channel), config);
+        super(new ConnectionPoolFactory(config.getConfigNetworkPath(), appUser, channel), config);
     }
 
-    private static class ChannelPoolFactory extends BasePooledObjectFactory<FabricConnectionImpl> {
+    private static class ConnectionPoolFactory extends BasePooledObjectFactory<FabricConnectionImpl> {
 
         private String config_network_path = "";
         private User appUser;
         private String channel = "";
 
-        ChannelPoolFactory(String configNetworkPath, User appUser, String channel) {
+        ConnectionPoolFactory(String configNetworkPath, User appUser, String channel) {
             this.config_network_path = configNetworkPath;
             this.appUser = appUser;
             this.channel = channel;

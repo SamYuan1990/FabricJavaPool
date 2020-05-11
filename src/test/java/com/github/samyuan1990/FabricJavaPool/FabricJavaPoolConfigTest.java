@@ -21,5 +21,6 @@ public class FabricJavaPoolConfigTest {
         Assert.assertEquals(8, fJPC.getMaxIdle());
         Assert.assertEquals(2, fJPC.getMinIdle());
         Assert.assertEquals(1000, fJPC.getMaxWaitMillis());
+        Assert.assertEquals("./src/test/resources/crypto-wallet/peerOrganizations/org1.example.com/users", fJPC.getWalletPath());
     }
 }
