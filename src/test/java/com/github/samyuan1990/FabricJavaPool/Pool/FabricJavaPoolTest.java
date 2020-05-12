@@ -3,6 +3,7 @@
  */
 package com.github.samyuan1990.FabricJavaPool.Pool;
 
+import com.github.samyuan1990.FabricJavaPool.FabricConnectionPoolFactory;
 import com.github.samyuan1990.FabricJavaPool.FabricJavaPoolConfig;
 import com.github.samyuan1990.FabricJavaPool.api.FabricConnection;
 import com.github.samyuan1990.FabricJavaPool.util.TestUtil;
@@ -14,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 public class FabricJavaPoolTest {
 
     @Test public void testChannelPool() {
-        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel);
+        ObjectPool<FabricConnection>  fabricConnectionPool = FabricConnectionPoolFactory.getPool(TestUtil.getUser(), TestUtil.myChannel);
         try {
             FabricConnection fabricConnectionImpl = fabricConnectionPool.borrowObject();
             assertNotEquals("Test borrow item channel not null", fabricConnectionImpl, null);
