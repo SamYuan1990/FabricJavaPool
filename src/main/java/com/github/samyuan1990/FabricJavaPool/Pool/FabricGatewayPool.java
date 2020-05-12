@@ -1,7 +1,10 @@
-package com.github.samyuan1990.FabricJavaPool;
+package com.github.samyuan1990.FabricJavaPool.Pool;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import com.github.samyuan1990.FabricJavaPool.FabricJavaPoolConfig;
+import com.github.samyuan1990.FabricJavaPool.api.FabricConnection;
 import com.github.samyuan1990.FabricJavaPool.impl.FabricContractConnectImpl;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
@@ -10,7 +13,7 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.hyperledger.fabric.gateway.Gateway;
 import org.hyperledger.fabric.gateway.Wallet;
 
-public class FabricGatewayPool extends GenericObjectPool<FabricContractConnectImpl> {
+public class FabricGatewayPool extends GenericObjectPool<FabricConnection> {
 
     public FabricGatewayPool(String userName, String channel) {
         super(new ContractPoolFactory(userName, channel), new FabricJavaPoolConfig());
@@ -20,7 +23,7 @@ public class FabricGatewayPool extends GenericObjectPool<FabricContractConnectIm
         super(new ContractPoolFactory(config, userName, channel), config);
     }
 
-    private static class ContractPoolFactory extends BasePooledObjectFactory<FabricContractConnectImpl> {
+    private static class ContractPoolFactory extends BasePooledObjectFactory<FabricConnection> {
 
         private FabricJavaPoolConfig config =  new FabricJavaPoolConfig();
 
@@ -60,7 +63,7 @@ public class FabricGatewayPool extends GenericObjectPool<FabricContractConnectIm
         }
 
         @Override
-        public PooledObject<FabricContractConnectImpl> wrap(FabricContractConnectImpl obj) {
+        public PooledObject<FabricConnection> wrap(FabricConnection obj) {
             return new DefaultPooledObject<>(obj);
         }
 

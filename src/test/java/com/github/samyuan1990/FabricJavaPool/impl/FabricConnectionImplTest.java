@@ -1,9 +1,11 @@
-package com.github.samyuan1990.FabricJavaPool;
+package com.github.samyuan1990.FabricJavaPool.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.github.samyuan1990.FabricJavaPool.impl.FabricConnectionImpl;
+import com.github.samyuan1990.FabricJavaPool.ExecuteResult;
+import com.github.samyuan1990.FabricJavaPool.RunTimeException;
+import com.github.samyuan1990.FabricJavaPool.Util;
 import com.github.samyuan1990.FabricJavaPool.util.TestUtil;
 import org.hyperledger.fabric.protos.peer.FabricProposalResponse;
 import org.hyperledger.fabric.sdk.*;
@@ -47,6 +49,29 @@ public class FabricConnectionImplTest {
         } catch (Exception e) {
                 e.printStackTrace();
             }
+    }
+
+    @Test
+    public void query2() throws ProposalException, InvalidArgumentException {
+        Channel mockChannel = mock(Channel.class);
+        ProposalResponse mockProposalResponse = mock(ProposalResponse.class);
+        Collection<ProposalResponse> queryPropResp = new ArrayList<ProposalResponse>();
+        queryPropResp.add(mockProposalResponse);
+        Mockito.when(mockChannel.queryByChaincode(Mockito.any())).thenReturn(queryPropResp);
+        Mockito.when(mockProposalResponse.getStatus()).thenReturn(ChaincodeResponse.Status.SUCCESS);
+        Mockito.when(mockProposalResponse.getProposalResponse()).thenReturn(FabricProposalResponse.ProposalResponse.newBuilder().
+                setResponse(org.hyperledger.fabric.protos.peer.FabricProposalResponse.Response.newBuilder().setMessage("90").setStatus(1).setPayload(com.google.protobuf.ByteString.copyFromUtf8("90")))
+                .setPayload(com.google.protobuf.ByteString.copyFromUtf8("90")).build());
+        try {
+            FabricConnectionImpl myConnection = new FabricConnectionImpl();
+            myConnection.setMychannel(mockChannel);
+            myConnection.setUser(TestUtil.getUser());
+            ExecuteResult rs = myConnection.query(TestUtil.myCC, "query", "a");
+            Assert.assertEquals("90", rs.getResult());
+            Assert.assertEquals(queryPropResp, rs.getPropResp());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -117,6 +142,29 @@ public class FabricConnectionImplTest {
         } catch (Exception e) {
                 e.printStackTrace();
             }
+    }
+
+    @Test
+    public void invoke2()  throws ProposalException, InvalidArgumentException {
+        Channel mockChannel = mock(Channel.class);
+        ProposalResponse mockProposalResponse = mock(ProposalResponse.class);
+        Collection<ProposalResponse> queryPropResp = new ArrayList<ProposalResponse>();
+        queryPropResp.add(mockProposalResponse);
+        Mockito.when(mockChannel.sendTransactionProposal(Mockito.any())).thenReturn(queryPropResp);
+        Mockito.when(mockProposalResponse.getStatus()).thenReturn(ChaincodeResponse.Status.SUCCESS);
+        Mockito.when(mockProposalResponse.getProposalResponse()).thenReturn(FabricProposalResponse.ProposalResponse.newBuilder().
+                setResponse(org.hyperledger.fabric.protos.peer.FabricProposalResponse.Response.newBuilder().setMessage("90").setStatus(1).setPayload(com.google.protobuf.ByteString.copyFromUtf8("90")))
+                .setPayload(com.google.protobuf.ByteString.copyFromUtf8("90")).build());
+        try {
+            FabricConnectionImpl myConnection = new FabricConnectionImpl();
+            myConnection.setMychannel(mockChannel);
+            myConnection.setUser(TestUtil.getUser());
+            ExecuteResult rs = myConnection.invoke(TestUtil.myCC, "query", "a");
+            Assert.assertEquals("90", rs.getResult());
+            Assert.assertEquals(queryPropResp, rs.getPropResp());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
