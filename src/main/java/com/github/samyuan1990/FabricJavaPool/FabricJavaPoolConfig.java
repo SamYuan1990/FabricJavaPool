@@ -7,6 +7,35 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 public class FabricJavaPoolConfig extends GenericObjectPoolConfig {
 
+    private boolean useCache;
+    private String cacheURL;
+
+    public boolean isUseCache() {
+        return useCache;
+    }
+
+    public void setUseCache(boolean useCache) {
+        this.useCache = useCache;
+    }
+
+    public String getCacheURL() {
+        return cacheURL;
+    }
+
+    public void setCacheURL(String cacheURL) {
+        this.cacheURL = cacheURL;
+    }
+
+    public int getCacheTimeout() {
+        return cacheTimeout;
+    }
+
+    public void setCacheTimeout(int cacheTimeout) {
+        this.cacheTimeout = cacheTimeout;
+    }
+
+    private int cacheTimeout;
+
     private static String configFile = "/FabricJavaPool.properties";
 
     public void setConfigNetworkPath(String configNetworkPath) {
@@ -50,6 +79,11 @@ public class FabricJavaPoolConfig extends GenericObjectPoolConfig {
             this.setMaxIdle(Integer.valueOf(properties.getProperty("maxIdle")).intValue());
             this.setMinIdle(Integer.valueOf(properties.getProperty("minIdle")).intValue());
             this.setMaxWaitMillis(Integer.valueOf(properties.getProperty("maxWaitMillis")).intValue());
+            this.setUseCache(Boolean.valueOf(properties.getProperty("UseCache")));
+            if (this.isUseCache()) {
+                this.setCacheURL(properties.getProperty("cacheURL"));
+                this.setCacheTimeout(Integer.valueOf(properties.getProperty("cacheTimeout")).intValue());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

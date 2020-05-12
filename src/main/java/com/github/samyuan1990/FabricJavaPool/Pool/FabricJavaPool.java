@@ -4,9 +4,11 @@
 package com.github.samyuan1990.FabricJavaPool.Pool;
 
 import java.io.File;
+import java.lang.reflect.Proxy;
 
 import com.github.samyuan1990.FabricJavaPool.FabricJavaPoolConfig;
 import com.github.samyuan1990.FabricJavaPool.api.FabricConnection;
+import com.github.samyuan1990.FabricJavaPool.cache.CacheProxy;
 import com.github.samyuan1990.FabricJavaPool.impl.FabricConnectionImpl;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
@@ -21,27 +23,35 @@ import org.hyperledger.fabric.sdk.security.CryptoSuite;
 public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
 
     public FabricJavaPool(User appUser, String channel) {
-        super(new ConnectionPoolFactory(new FabricJavaPoolConfig().getConfigNetworkPath(), appUser, channel), new FabricJavaPoolConfig());
+        super(new ConnectionPoolFactory(appUser, channel));
     }
 
     public FabricJavaPool(User appUser, String channel, FabricJavaPoolConfig config) {
-        super(new ConnectionPoolFactory(config.getConfigNetworkPath(), appUser, channel), config);
+        super(new ConnectionPoolFactory(appUser, channel, config));
     }
 
     private static class ConnectionPoolFactory extends BasePooledObjectFactory<FabricConnection> {
 
+        private FabricJavaPoolConfig config =  new FabricJavaPoolConfig();
         private String config_network_path = "";
         private User appUser;
         private String channel = "";
 
-        ConnectionPoolFactory(String configNetworkPath, User appUser, String channel) {
-            this.config_network_path = configNetworkPath;
+        ConnectionPoolFactory(User appUser, String channel) {
+            this.config_network_path = config.getConfigNetworkPath();
+            this.appUser = appUser;
+            this.channel = channel;
+        }
+
+        ConnectionPoolFactory(User appUser, String channel, FabricJavaPoolConfig config) {
+            this.config = config;
+            this.config_network_path = config.getConfigNetworkPath();
             this.appUser = appUser;
             this.channel = channel;
         }
 
         @Override
-        public FabricConnectionImpl create() throws Exception {
+        public FabricConnection create() throws Exception {
             FabricConnectionImpl myConnection;
             CryptoSuite cryptoSuite = CryptoSuite.Factory.getCryptoSuite();
             HFClient hfclient = HFClient.createNewInstance();
@@ -52,7 +62,13 @@ public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
             Channel myChannel = hfclient.getChannel(channel);
             myChannel.initialize();
             myConnection = new FabricConnectionImpl(hfclient, myChannel, appUser);
-            return myConnection;
+            if (config.isUseCache()) {
+                CacheProxy proxy = new CacheProxy(myConnection, config.getCacheURL(), appUser.getName(), channel, config.getCacheTimeout());
+                return (FabricConnection) Proxy.newProxyInstance(FabricConnectionImpl.class.getClassLoader(), new Class[]{FabricConnection.class}, proxy);
+            } else {
+                return myConnection;
+            }
+
         }
 
         @Override

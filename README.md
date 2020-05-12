@@ -3,7 +3,7 @@
 
 based on [fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)  1.4.6 and JDK8
 following design of JDBC
-Basing common pool and Fabric Java SDK.
+Basing common pool and Fabric Java SDK, able with cache support for query with memcache.
 Will provide you a config and a pool object of channel obj base on User.
 Mostly used as query chain code for a specific user.
 
@@ -33,11 +33,21 @@ maxTotal=10
 maxIdle=8
 minIdle=2
 maxWaitMillis=1000
+# if you want to use fabric gateway
+walletPath=./src/test/resources/crypto-wallet/peerOrganizations/org1.example.com/users
+# if you want to use cache
+UseCache=true
+cacheURL=127.0.0.1:11211
+cacheTimeout=300
 ```
 
 ## Get Connection
 ```
-        ObjectPool<FabricConnection>  fabricConnectionPool = new FabricJavaPool(TestUtil.getUser(), TestUtil.myChannel);
+        //if you want to use fabric gateway
+        GenericObjectPool<FabricConnection> pool = FabricConnectionPoolFactory.getPool(TestUtil.userName, TestUtil.myChannel);
+        //if you want to use fabric java sdk
+        GenericObjectPool<FabricConnection> pool = FabricConnectionPoolFactory.getPool(TestUtil.getUser(), TestUtil.myChannel);
+
         // By Default it will read pool config from ./resources/FabricJavaPool.properties
         try {
             FabricConnection fabricConnectionImpl = fabricConnectionPool.borrowObject();
@@ -58,13 +68,13 @@ maxWaitMillis=1000
 ## Query
 ```
 FabricConnection myConnection = myChannelPool.borrowObject();
-ExecuteResult rs = myConnection.query(cci, "query", "a");
+ExecuteResult rs = myConnection.query("mycc", "query", "a");
 Assert.assertEquals("90", rs.getResult());
 ```
 ## Invoke
 ```
 FabricConnection myConnection = myChannelPool.borrowObject();
-ExecuteResult rs = myConnection.invoke(cci, "query", "a");
+ExecuteResult rs = myConnection.invoke("mycc", "query", "a");
 Assert.assertEquals("90", rs.getResult());
 ```
 ## Query or Invoke exception
@@ -94,6 +104,11 @@ Copy crypto-config to your local byfn
 byfn.sh up
 ```
 
+Start memcache
+```
+docker run -p 11211:11211 --name memcache memcached
+```
+
 Add ect hosts with
 ```
 127.0.0.1       peer0.org2.example.com
@@ -108,13 +123,9 @@ gradle clean build
 
 # Version
 0.0.1 as basic version
+0.0.2 Add query and invoke support, prop file support.
 
 # To do
-0.0.2
-* Add query and invoke support
-* Add prop file support.
-* Mock test support(optional)
-
 0.0.3
 * Add cache from memcache, cache logic as time duration.
 

@@ -1,6 +1,7 @@
-package com.github.samyuan1990.FabricJavaPool;
+package com.github.samyuan1990.FabricJavaPool.Pool;
 
-import com.github.samyuan1990.FabricJavaPool.Pool.FabricGatewayPool;
+import com.github.samyuan1990.FabricJavaPool.FabricConnectionPoolFactory;
+import com.github.samyuan1990.FabricJavaPool.FabricJavaPoolConfig;
 import com.github.samyuan1990.FabricJavaPool.api.FabricConnection;
 import com.github.samyuan1990.FabricJavaPool.util.TestUtil;
 import org.apache.commons.pool2.ObjectPool;
@@ -21,7 +22,7 @@ public class FabricGatewayPoolTest {
 
     @Test
     public void testGatewayPool() throws Exception {
-        ObjectPool<FabricConnection> fGWP = new FabricGatewayPool(TestUtil.userName, TestUtil.myChannel);
+        ObjectPool<FabricConnection> fGWP = FabricConnectionPoolFactory.getPool(TestUtil.userName, TestUtil.myChannel);
         FabricConnection contractConnect1 = fGWP.borrowObject();
         FabricConnection contractConnect2 = fGWP.borrowObject();
         assertNotEquals(contractConnect1, contractConnect2);
