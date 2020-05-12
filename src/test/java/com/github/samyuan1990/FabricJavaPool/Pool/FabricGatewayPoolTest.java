@@ -1,6 +1,6 @@
-package com.github.samyuan1990.FabricJavaPool;
+package com.github.samyuan1990.FabricJavaPool.Pool;
 
-import com.github.samyuan1990.FabricJavaPool.Pool.FabricGatewayPool;
+import com.github.samyuan1990.FabricJavaPool.FabricJavaPoolConfig;
 import com.github.samyuan1990.FabricJavaPool.api.FabricConnection;
 import com.github.samyuan1990.FabricJavaPool.util.TestUtil;
 import org.apache.commons.pool2.ObjectPool;
