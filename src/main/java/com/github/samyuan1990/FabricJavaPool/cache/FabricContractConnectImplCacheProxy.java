@@ -3,24 +3,35 @@ package com.github.samyuan1990.FabricJavaPool.cache;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import net.rubyeye.xmemcached.MemcachedClient;
 import net.rubyeye.xmemcached.MemcachedClientBuilder;
 import net.rubyeye.xmemcached.XMemcachedClientBuilder;
 import net.rubyeye.xmemcached.utils.AddrUtil;
 
-public class CacheProxy implements InvocationHandler {
+public class FabricContractConnectImplCacheProxy implements InvocationHandler {
 
-    private Object obj;
-    private MemcachedClient memcachedClient;
-    private String cacheURL;
-    private String userName;
-    private String channelName;
-    private int timeout;
+    Object obj;
 
-    public CacheProxy(Object obj, String cacheURL, String userName, String channelName, int timeout) {
+    public void setMemcachedClient(MemcachedClient memcachedClient) {
+        this.memcachedClient = memcachedClient;
+    }
+
+    public FabricContractConnectImplCacheProxy(Object obj, String userName, String channelName, int timeout) {
+        this.timeout = timeout;
+        this.channelName = channelName;
+        this.userName = userName;
+        this.cacheURL = cacheURL;
+        this.obj = obj;
+    }
+
+    MemcachedClient memcachedClient;
+    String cacheURL;
+    String userName;
+    String channelName;
+    int timeout;
+
+    public FabricContractConnectImplCacheProxy(Object obj, String cacheURL, String userName, String channelName, int timeout) {
         this.timeout = timeout;
         this.channelName = channelName;
         this.userName = userName;
@@ -34,13 +45,15 @@ public class CacheProxy implements InvocationHandler {
         this.obj = obj;
     }
 
-    private String genericKey(String user, String channel, Object[] args) {
+    String genericKey(String user, String channel, Object[] args) {
         String key = "";
         key = key.concat(args[0].toString());
         key = key.concat(args[1].toString());
-        String[] list = (String[]) args[2];
-        for (Object l : list) {
-            key = key.concat(l.toString());
+        if (args.length > 2) {
+            String[] list = (String[]) args[2];
+            for (Object l : list) {
+                key = key.concat(l.toString());
+            }
         }
         key = key.concat(user.concat(channel));
         return key;
@@ -60,7 +73,6 @@ public class CacheProxy implements InvocationHandler {
             }
             result = method.invoke(obj, args);
             memcachedClient.set(key, timeout, result);
-            result = memcachedClient.get(key);
         }
         return result;
     }

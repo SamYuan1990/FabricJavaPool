@@ -8,7 +8,8 @@ import java.lang.reflect.Proxy;
 
 import com.github.samyuan1990.FabricJavaPool.FabricJavaPoolConfig;
 import com.github.samyuan1990.FabricJavaPool.api.FabricConnection;
-import com.github.samyuan1990.FabricJavaPool.cache.CacheProxy;
+import com.github.samyuan1990.FabricJavaPool.cache.FabricConnectionImplCacheProxy;
+import com.github.samyuan1990.FabricJavaPool.cache.FabricContractConnectImplCacheProxy;
 import com.github.samyuan1990.FabricJavaPool.impl.FabricConnectionImpl;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
@@ -63,7 +64,7 @@ public class FabricJavaPool extends GenericObjectPool<FabricConnection> {
             myChannel.initialize();
             myConnection = new FabricConnectionImpl(hfclient, myChannel, appUser);
             if (config.isUseCache()) {
-                CacheProxy proxy = new CacheProxy(myConnection, config.getCacheURL(), appUser.getName(), channel, config.getCacheTimeout());
+                FabricConnectionImplCacheProxy proxy = new FabricConnectionImplCacheProxy(myConnection, config.getCacheURL(), appUser.getName(), channel, config.getCacheTimeout());
                 return (FabricConnection) Proxy.newProxyInstance(FabricConnectionImpl.class.getClassLoader(), new Class[]{FabricConnection.class}, proxy);
             } else {
                 return myConnection;
