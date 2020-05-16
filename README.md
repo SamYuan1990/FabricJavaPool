@@ -1,7 +1,7 @@
 # FabricJavaPool
 **A Connection pool manager for Fabric development**
 
-based on [fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)  1.4.6 and JDK8
+based on [fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)  1.4.6 , [fabric-gateway-java](https://github.com/hyperledger/fabric-gateway-java) 1.4.3 and JDK8
 following design of JDBC
 Basing common pool and Fabric Java SDK, able with cache support for query with memcache.
 Will provide you a config and a pool object of channel obj base on User.
@@ -15,14 +15,14 @@ So a connection pool basing on user's msp, and try to reuse the connection on ja
 # Sample usage:
 ## Gradle
 ```
-	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.2'
+	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.3'
 ```
 For SNAPSHOT version
 ```
    repositories {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
-	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.2-SNAPSHOT'
+	implementation group: 'com.github.samyuan1990', name:'FabricJavaPool', version: '0.0.3-SNAPSHOT'
 ```
 
 ## Pool config
