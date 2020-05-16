@@ -124,10 +124,7 @@ gradle clean build
 # Version
 0.0.1 as basic version
 0.0.2 Add query and invoke support, prop file support.
+0.0.3 Add support for fabric-java-gateway, cache
 
 # To do
-0.0.3
-* Add cache from memcache, cache logic as time duration.
-
-0.0.4
-* Add cache refresh support by new block listener.
+if there is no more feature request, will update to 1.0.0 release
