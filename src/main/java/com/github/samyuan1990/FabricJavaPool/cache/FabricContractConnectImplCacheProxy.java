@@ -68,7 +68,7 @@ public class FabricContractConnectImplCacheProxy implements InvocationHandler {
             String key = genericKey(userName, channelName, args);
             result = memcachedClient.get(key);
             if (result != null) {
-                System.out.println("hit");
+                //System.out.println("hit");
                 return result;
             }
             result = method.invoke(obj, args);
